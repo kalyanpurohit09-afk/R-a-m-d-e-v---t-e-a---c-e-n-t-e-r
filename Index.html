@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ramdev Tea Center</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:Arial;margin:0;background:#f2f2f2}
+nav{background:#222;padding:10px;text-align:center}
+nav button{margin:4px;padding:8px 10px;border:none;border-radius:5px;background:#25D366;color:#fff}
+section{display:none;padding:12px}
+.active{display:block}
+.item{background:#fff;margin:6px 0;padding:8px;border-radius:6px}
+button.add{margin-top:5px;background:#222}
+.cartbox{background:#fff;padding:10px;border-radius:6px}
+input{width:100%;padding:6px;margin:5px 0}
+</style>
+</head>
+<body>
 
+<nav>
+<button onclick="show('home')">Home / Profile</button>
+<button onclick="show('chai')">Chai Coffee Milk</button>
+<button onclick="show('biscuit')">Biscuit</button>
+<button onclick="show('pan')">Pan Masala</button>
+<button onclick="show('cart')">Cart / Order</button>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active">
+<h2>Ramdev Tea Center ☕</h2>
+<p>Opp. Sardar Arcade, Gopal Locho lane, Bardoli</p>
+<p>Time: 7:00 AM – 8:00 PM</p>
+<p>Call: 8905320031</p>
+</section>
+
+<!-- CHAI -->
+<section id="chai">
+<h2>Chai / Coffee / Hot Milk</h2>
+<div id="chaiItems"></div>
+</section>
+
+<!-- BISCUIT -->
+<section id="biscuit">
+<h2>Biscuits</h2>
+<div id="biscuitItems"></div>
+</section>
+
+<!-- PAN -->
+<section id="pan">
+<h2>Pan Masala / Mukhwas</h2>
+<div id="panItems"></div>
+</section>
+
+<!-- CART -->
+<section id="cart">
+<h2>Your Cart</h2>
+<div class="cartbox" id="cartItems"></div>
+<h3 id="total">Total: ₹0</h3>
+
+<input id="name" placeholder="Your Name">
+<input id="mobile" placeholder="Mobile Number">
+
+<button onclick="sendOrder()">Order on WhatsApp</button>
+</section>
+
+<script>
+const phone="918905320031";
+
+const products=[
+{name:"Regular Chai Half",price:10,cat:"chai"},
+{name:"Regular Chai Full",price:20,cat:"chai"},
+{name:"Special Chai Half",price:20,cat:"chai"},
+{name:"Special Chai Full",price:25,cat:"chai"},
+{name:"Coffee Half",price:10,cat:"chai"},
+{name:"Coffee Full",price:25,cat:"chai"},
+{name:"Hot Milk Half",price:10,cat:"chai"},
+{name:"Hot Milk Full",price:20,cat:"chai"},
+
+{name:"20-20 Biscuit",price:5,cat:"biscuit"},
+{name:"Monaco Biscuit",price:5,cat:"biscuit"},
+{name:"Krackjack Biscuit",price:5,cat:"biscuit"},
+{name:"Good Day Biscuit",price:5,cat:"biscuit"},
+{name:"Bounce Biscuit",price:5,cat:"biscuit"},
+{name:"Parle-G Biscuit",price:5,cat:"biscuit"},
+
+{name:"Vimal ₹5",price:5,cat:"pan"},
+{name:"Vimal ₹10",price:10,cat:"pan"},
+{name:"Vimal ₹20",price:20,cat:"pan"},
+{name:"Vimal ₹50",price:50,cat:"pan"},
+{name:"Karamchand ₹5",price:5,cat:"pan"},
+{name:"Karamchand ₹20",price:20,cat:"pan"},
+{name:"Tansen ₹5",price:5,cat:"pan"},
+{name:"Miraz ₹10",price:10,cat:"pan"},
+{name:"Pandharpuri ₹5",price:5,cat:"pan"},
+{name:"Pandharpuri Navsari ₹5",price:5,cat:"pan"},
+{name:"Anand Mukhwas ₹1",price:1,cat:"pan"},
+{name:"Dhanadal Mukhwas ₹1",price:1,cat:"pan"},
+{name:"Paas Paas ₹1",price:1,cat:"pan"},
+{name:"Paan ₹1",price:1,cat:"pan"},
+{name:"Baba Supari ₹2",price:2,cat:"pan"},
+{name:"Jaljeera ₹2",price:2,cat:"pan"},
+{name:"Amala ₹2",price:2,cat:"pan"}
+];
+
+let cart=[];
+
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+function loadItems(){
+products.forEach((p,i)=>{
+let box=document.createElement("div");
+box.className="item";
+box.innerHTML=`<b>${p.name}</b> - ₹${p.price}<br>
+<button class="add" onclick="add(${i})">Add to Cart</button>`;
+document.getElementById(p.cat+"Items").appendChild(box);
+});
+}
+
+function add(i){
+cart.push(products[i]);
+updateCart();
+show('cart');
+}
+
+function updateCart(){
+let c=document.getElementById("cartItems");
+c.innerHTML="";
+let total=0;
+cart.forEach(p=>{
+total+=p.price;
+c.innerHTML+=`${p.name} - ₹${p.price}<br>`;
+});
+document.getElementById("total").innerText="Total: ₹"+total;
+}
+
+function sendOrder(){
+let name=document.getElementById("name").value;
+let mobile=document.getElementById("mobile").value;
+let msg=`Ramdev Tea Center Order%0AName: ${name}%0AMobile: ${mobile}%0A`;
+cart.forEach(p=>msg+=`${p.name} - ₹${p.price}%0A`);
+msg+=document.getElementById("total").innerText;
+window.open(`https://wa.me/${phone}?text=${msg}`);
+}
+
+loadItems();
+</script>
+
+</body>
+  </html>
